@@ -1,0 +1,62 @@
+%%% -------------------------------------------------------------------
+%%% Author  : uabjle
+%%% Description :  1
+%%% 
+%%% Created : 10 dec 2012
+%%% -------------------------------------------------------------------
+-module(prototype_test).   
+    
+%% --------------------------------------------------------------------
+%% Include files
+%% --------------------------------------------------------------------
+-include_lib("kernel/include/logger.hrl").
+-include("controller.hrl").
+%% --------------------------------------------------------------------
+
+%% External exports
+-export([start/0]). 
+
+
+%% ====================================================================
+%% External functions
+%% ====================================================================
+
+
+%% --------------------------------------------------------------------
+%% Function:tes cases
+%% Description: List of test cases 
+%% Returns: non
+%% --------------------------------------------------------------------
+start()->
+   % init
+    {ok,_DbasePid}=dbase:start(),
+    ok=dbase:dynamic_db_init([]),
+    io:format("mnesia:sys info) ~p~n",[{mnesia:system_info(),?FUNCTION_NAME,?MODULE,?LINE}]),
+    %% load from file 
+    {atomic,ok}=mnesia:load_textfile("host.config"),
+    gl=lists:sort(mnesia:dirty_all_keys(host)),
+    {atomic,ok}=mnesia:load_textfile("fruit.con"),
+    gl=lists:sort(mnesia:dirty_all_keys(host)),
+  
+
+   % io:format("mnesia:dirty_all_keys ~p~n",[{mnesia:dirty_all_keys(host),?FUNCTION_NAME,?MODULE,?LINE}]),
+   % io:format("mnesia:dirty_all_keys ~p~n",[{mnesia:dirty_all_keys(fruit),?FUNCTION_NAME,?MODULE,?LINE}]),
+    
+    
+    init:stop(),
+    timer:sleep(1000),
+    
+  ok. 
+
+%% --------------------------------------------------------------------
+%% Function:start/0 
+%% Description: Initiate the eunit tests, set upp needed processes etc
+%% Returns: non
+%% -------------------------------------------------------------------
+
+%% --------------------------------------------------------------------
+%% Function:start/0 
+%% Description: Initiate the eunit tests, set upp needed processes etc
+%% Returns: non
+%% --------------------------------------------------------------------
+
