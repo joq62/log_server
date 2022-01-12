@@ -57,7 +57,7 @@ nice_print(Id)->
 	{aborted,Reason}->
 	    {error,Reason};
 	Info->
-	    {Id,SystemTime,Node,Severity,Msg,Module,Function,Line,Args,Status}=Info,
+	    {Id,SystemTime,Node,Severity,Msg,Module,Function,Line,Args,_Status}=Info,
 	    Time=calendar:system_time_to_rfc3339(SystemTime,                
 						 [{unit, ?SystemTime}, {time_designator, $\s}, {offset, "Z"}]),
 
@@ -66,12 +66,12 @@ nice_print(Id)->
 	    Module1=atom_to_list(Module),
 	    Function1=atom_to_list(Function),
 	    Line1=integer_to_list(Line),
-	    Status1=atom_to_list(Status),
+	    %Status1=atom_to_list(Status),
 	    Msg1=" "++Msg,
 	    MF=" "++Module1++":"++Function1,
 
 	  %  io:format("MF ~p~n",[{Id,?MODULE,?FUNCTION_NAME,?LINE}]),	    
-	    io:format("~s ~s ~s",[Time,Msg1,MF]),
+	    io:format("~s ~s ~s ~s",[Time,Severity1,Msg1,MF]),
 	    io:format(" ["),
 	    print(Args),
 	    io:format("] "),

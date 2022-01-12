@@ -14,7 +14,7 @@
 %% --------------------------------------------------------------------
 %% Include files
 %% --------------------------------------------------------------------
-
+-include("log.hrl").
 %% --------------------------------------------------------------------
 
 %% External exports
@@ -51,7 +51,7 @@
 %% --------------------------------------------------------------------
 init([]) ->
     db_log:create_table(),
-
+    rpc:cast(node(),log,log,[?Log_info("server started",[])]),
     {ok, #state{}}.
 
 %% --------------------------------------------------------------------
@@ -69,24 +69,6 @@ handle_call({read_all},_From, State) ->
     {reply, Reply, State};
 handle_call({read_all,NumLatesInfo},_From, State) ->
     Reply=  Reply=lib_log:read_all(NumLatesInfo),
-    {reply, Reply, State};
-handle_call({read_alert},_From, State) ->
-    Reply=ok,
-    {reply, Reply, State};
-handle_call({read_alert,NumLatesInfo},_From, State) ->
-    Reply=ok,
-    {reply, Reply, State};
-handle_call({read_ticket},_From, State) ->
-    Reply=ok,
-    {reply, Reply, State};
-handle_call({read_ticket,NumLatesInfo},_From, State) ->
-    Reply=ok,
-    {reply, Reply, State};
-handle_call({read_info},_From, State) ->
-    Reply=ok,
-    {reply, Reply, State};
-handle_call({read_info,NumLatesInfo},_From, State) ->
-    Reply=ok,
     {reply, Reply, State};
 
 handle_call({stop}, _From, State) ->
@@ -106,17 +88,6 @@ handle_call(Request, From, State) ->
 handle_cast({log,Info}, State) ->
     lib_log:store(Info),
     {noreply, State};
-
-handle_cast({alert,Info}, State) ->
-
-    {noreply, State};
-handle_cast({ticket,Info}, State) ->
-
-    {noreply, State};
-handle_cast({info,Info}, State) ->
-
-    {noreply, State};
-
 handle_cast(Msg, State) ->
     io:format("unmatched match cast ~p~n",[{Msg,?MODULE,?LINE}]),
     {noreply, State}.

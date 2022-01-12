@@ -51,8 +51,13 @@ ids()->
 
 %%------------------------- Generic  dbase commands ----------------------
 create_table()->
-    {atomic,ok}=mnesia:create_table(?TABLE, [{attributes, record_info(fields, ?RECORD)}]),
-    mnesia:wait_for_tables([?TABLE], 20000).
+  Result=case mnesia:create_table(?TABLE, [{attributes, record_info(fields, ?RECORD)}]) of
+	     {atomic,ok}->
+		 mnesia:wait_for_tables([?TABLE], 20000);
+	     {aborted,Reason}->
+		 {aborted,Reason}
+	 end, 
+    Result. 
 delete_table_copy(Dest)->
     mnesia:del_table_copy(?TABLE,Dest).
 
