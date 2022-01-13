@@ -15,8 +15,10 @@
 	 store_alert/1,
 	 store_ticket/1,
 	 store_info/1,
-	 read_all/0,
-	 read_all/1,
+	 print_all/0,
+	 print_all/1,
+	 read_all_info/0,
+	 read_all_info/1,
 	 read_alert/0,
 	 read_alert/1,
 	 read_ticket/0,
@@ -79,10 +81,15 @@ store_ticket(Info)->
 store_info(Info)->
     gen_server:cast(?SERVER, {info,Info}).
 
-read_all()-> 
-    gen_server:call(?SERVER, {read_all},infinity).
-read_all(NumLatesInfo)->
-    gen_server:call(?SERVER, {read_all,NumLatesInfo},infinity).
+print_all()-> 
+    gen_server:call(?SERVER, {print_all},infinity).
+print_all(NumLatesInfo)->
+    gen_server:call(?SERVER, {print_all,NumLatesInfo},infinity).
+read_all_info()-> 
+    gen_server:call(?SERVER, {read_all_info},infinity).
+read_all_info(NumLatesInfo)->
+    gen_server:call(?SERVER, {read_all_info,NumLatesInfo},infinity).
+
 read_alert()->
     gen_server:call(?SERVER, {read_alert},infinity).
 read_alert(NumLatesInfo)->

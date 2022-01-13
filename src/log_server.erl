@@ -64,11 +64,18 @@ init([]) ->
 %%          {stop, Reason, Reply, State}   | (terminate/2 is called)
 %%          {stop, Reason, State}            (terminate/2 is called)
 %% --------------------------------------------------------------------
-handle_call({read_all},_From, State) ->
-    Reply=lib_log:read_all(),
+handle_call({print_all},_From, State) ->
+    Reply=lib_log:print_all(),
     {reply, Reply, State};
-handle_call({read_all,NumLatesInfo},_From, State) ->
-    Reply=  Reply=lib_log:read_all(NumLatesInfo),
+handle_call({print_all,NumLatesInfo},_From, State) ->
+    Reply=  Reply=lib_log:print_all(NumLatesInfo),
+    {reply, Reply, State};
+
+handle_call({read_all_info},_From, State) ->
+    Reply=lib_log:read_all_info(),
+    {reply, Reply, State};
+handle_call({read_all_info,NumLatesInfo},_From, State) ->
+    Reply=  Reply=lib_log:read_all_info(NumLatesInfo),
     {reply, Reply, State};
 
 handle_call({stop}, _From, State) ->
