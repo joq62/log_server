@@ -11,12 +11,11 @@ unit_test:
 	rm -rf  *~ */*~  erl_cra*;
 	mkdir test_ebin;
 #	common
-#	common
-	erlc -D unit_test -I ../../include -I include -o ebin ../../common/src/*.erl;
+	erlc -D unit_test -I include -o ebin ../../common/src/*.erl;
 #	sd
 	erlc -D unit_test -o ebin ../sd/src/*.erl;
-#	dbase
-	erlc -D unit_test -I ../log_server/include -o ebin ../dbase_server/src/*.erl;
+#	dbase_server
+	erlc -D unit_test -I include -o ebin ../dbase_server/src/*.erl;
 #	log_server
 	erlc -D unit_test -I include -o ebin src/*.erl;
 #	test application

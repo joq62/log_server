@@ -65,7 +65,8 @@ init()->
     ok=db_log:create(L3),
     ok=db_log:create(L4),
        
-    ok=log:read_all(),
+    ok=log:print_all(),
+    
 
     ok.
 
@@ -89,44 +90,11 @@ init()->
 %% Description: Initiate the eunit tests, set upp needed processes etc
 %% Returns: non
 %% --------------------------------------------------------------------
-get_nodes()->
-    HostId=net_adm:localhost(),
-    A="host0@"++HostId,
-    Node0=list_to_atom(A),
-    B="host1@"++HostId,
-    Node1=list_to_atom(B),
-    C="host2@"++HostId,
-    Node2=list_to_atom(C),    
-    [Node0,Node1,Node2].
-    
-start_slave(NodeName)->
-    HostId=net_adm:localhost(),
-    Node=list_to_atom(NodeName++"@"++HostId),
-    rpc:call(Node,init,stop,[]),
-    Cookie=atom_to_list(erlang:get_cookie()),
-    Args="-pa ebin -pa test_ebin -setcookie "++Cookie,
-    {ok,SNode}=slave:start(HostId,NodeName,Args),
-    [net_adm:ping(N)||N<-nodes()],
-    {ok,SNode}.
 
 setup()->
-    HostId=net_adm:localhost(),
-    A="host0@"++HostId,
-    Node0=list_to_atom(A),
-    B="host1@"++HostId,
-    Node1=list_to_atom(B),
-    C="host2@"++HostId,
-    Node2=list_to_atom(C),    
-    Nodes=[Node0,Node1,Node2],
-    [rpc:call(N,init,stop,[],5*1000)||N<-Nodes],
-    timer:sleep(2000),
-    [{ok,Node0},
-     {ok,Node1},
-     {ok,Node2}]=[start_slave(NodeName)||NodeName<-["host0","host1","host2"]],
-    [net_adm:ping(N)||N<-Nodes],
     {ok,_}=sd:start(),
-    application:set_env([{dbase_infra,[{dbase_app,dbase_infra}]}]),
-    ok=application:start(dbase_infra),
+    application:set_env([{unit_test,[{application,unit_test}]}]),
+    {ok,_}=dbase:start(),
     {ok,_}=log:start(),
     
    
@@ -140,11 +108,7 @@ setup()->
 %% -------------------------------------------------------------------    
 
 cleanup()->
-    mnesia:stop(),
-    mnesia:del_table_copy(schema,node()),
-    mnesia:delete_schema([node()]),
-    timer:sleep(1000),
-    [slave:stop(Node)||Node<-get_nodes()],
+   
     ok.
 %% --------------------------------------------------------------------
 %% Function:start/0 

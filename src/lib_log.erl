@@ -95,12 +95,13 @@ nice_print_info(Info)->
     MF=" "++Module1++":"++Function1,
     
 	  %  io:format("MF ~p~n",[{Id,?MODULE,?FUNCTION_NAME,?LINE}]),	    
-    io:format("~s ~s ~s ~s",[Time,Severity1,Msg1,MF]),
-    io:format(" ["),
+    io:format("~s ~s ~s",[Time,Severity1,MF]),
+    io:format("Line=~s Node=~s ~n",[Line1,Node1]), 
+   io:format(" ["),
     print(Args),
     io:format("] "),
-    io:format("Line=~s Node=~s",[Line1,Node1]),
-    io:format("~n").
+ 
+    io:format("~s ~n",[Msg1]).
 
 print([])->
     ok;
